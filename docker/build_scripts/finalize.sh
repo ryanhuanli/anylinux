@@ -16,6 +16,8 @@ for PREFIX in $(find /opt/_internal/ -mindepth 1 -maxdepth 1 \( -name 'cpython*'
 	if [ -e ${PREFIX}/bin/python3 ] && [ ! -e ${PREFIX}/bin/python ]; then
 		ln -s python3 ${PREFIX}/bin/python
 	fi
+    # RYAN w/o this bin can't find libcpython*.so* since we seperate it out with --enable-shared
+    export LD_LIBRARY_PATH=${PREFIX}/lib:${LD_LIBRARY_PATH}
 	${PREFIX}/bin/python -m ensurepip
 	if [ -e ${PREFIX}/bin/pip3 ] && [ ! -e ${PREFIX}/bin/pip ]; then
 		ln -s pip3 ${PREFIX}/bin/pip

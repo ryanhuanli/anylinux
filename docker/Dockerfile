@@ -106,55 +106,55 @@ RUN export TCL_ROOT=tcl8.6.13 && \
 COPY build_scripts/build-cpython.sh /build_scripts/
 
 
-FROM build_cpython AS build_cpython36
-COPY build_scripts/cpython-pubkeys.txt /build_scripts/cpython-pubkeys.txt
-RUN manylinux-entrypoint /build_scripts/build-cpython.sh 3.6.15
-
-
-FROM build_cpython AS build_cpython37
-COPY build_scripts/cpython-pubkeys.txt /build_scripts/cpython-pubkeys.txt
-RUN manylinux-entrypoint /build_scripts/build-cpython.sh 3.7.17
-
-
-FROM build_cpython AS build_cpython38
-COPY build_scripts/ambv-pubkey.txt /build_scripts/cpython-pubkeys.txt
-RUN manylinux-entrypoint /build_scripts/build-cpython.sh 3.8.17
-
-
-FROM build_cpython AS build_cpython39
-COPY build_scripts/ambv-pubkey.txt /build_scripts/cpython-pubkeys.txt
-RUN manylinux-entrypoint /build_scripts/build-cpython.sh 3.9.17
-
-
+# FROM build_cpython AS build_cpython36
+# COPY build_scripts/cpython-pubkeys.txt /build_scripts/cpython-pubkeys.txt
+# RUN manylinux-entrypoint /build_scripts/build-cpython.sh 3.6.15
+#
+#
+# FROM build_cpython AS build_cpython37
+# COPY build_scripts/cpython-pubkeys.txt /build_scripts/cpython-pubkeys.txt
+# RUN manylinux-entrypoint /build_scripts/build-cpython.sh 3.7.17
+# 
+# 
+# FROM build_cpython AS build_cpython38
+# COPY build_scripts/ambv-pubkey.txt /build_scripts/cpython-pubkeys.txt
+# RUN manylinux-entrypoint /build_scripts/build-cpython.sh 3.8.17
+# 
+# 
+# FROM build_cpython AS build_cpython39
+# COPY build_scripts/ambv-pubkey.txt /build_scripts/cpython-pubkeys.txt
+# RUN manylinux-entrypoint /build_scripts/build-cpython.sh 3.9.17
+# 
+# 
 FROM build_cpython AS build_cpython310
 COPY build_scripts/cpython-pubkey-310-311.txt /build_scripts/cpython-pubkeys.txt
 RUN manylinux-entrypoint /build_scripts/build-cpython.sh 3.10.12
+# 
+# FROM build_cpython AS build_cpython311
+# COPY build_scripts/cpython-pubkey-310-311.txt /build_scripts/cpython-pubkeys.txt
+# RUN manylinux-entrypoint /build_scripts/build-cpython.sh 3.11.4
 
-FROM build_cpython AS build_cpython311
-COPY build_scripts/cpython-pubkey-310-311.txt /build_scripts/cpython-pubkeys.txt
-RUN manylinux-entrypoint /build_scripts/build-cpython.sh 3.11.4
-
-FROM build_cpython AS build_cpython312
-COPY build_scripts/cpython-pubkey-312-313.txt /build_scripts/cpython-pubkeys.txt
-RUN manylinux-entrypoint /build_scripts/build-cpython.sh 3.12.0b4
+# FROM build_cpython AS build_cpython312
+# COPY build_scripts/cpython-pubkey-312-313.txt /build_scripts/cpython-pubkeys.txt
+# RUN manylinux-entrypoint /build_scripts/build-cpython.sh 3.12.0b4
 
 FROM build_cpython AS all_python
-COPY build_scripts/install-pypy.sh \
-     build_scripts/pypy.sha256 \
-     build_scripts/finalize-python.sh \
-     /build_scripts/
-RUN manylinux-entrypoint /build_scripts/install-pypy.sh 3.7 7.3.9
-RUN manylinux-entrypoint /build_scripts/install-pypy.sh 3.8 7.3.11
-RUN manylinux-entrypoint /build_scripts/install-pypy.sh 3.9 7.3.12
-RUN manylinux-entrypoint /build_scripts/install-pypy.sh 3.10 7.3.12
-COPY --from=build_cpython36 /opt/_internal /opt/_internal/
-COPY --from=build_cpython37 /opt/_internal /opt/_internal/
-COPY --from=build_cpython38 /opt/_internal /opt/_internal/
-COPY --from=build_cpython39 /opt/_internal /opt/_internal/
+# COPY build_scripts/install-pypy.sh \
+#      build_scripts/pypy.sha256 \
+#      build_scripts/finalize-python.sh \
+#      /build_scripts/
+# RUN manylinux-entrypoint /build_scripts/install-pypy.sh 3.7 7.3.9
+# RUN manylinux-entrypoint /build_scripts/install-pypy.sh 3.8 7.3.11
+# RUN manylinux-entrypoint /build_scripts/install-pypy.sh 3.9 7.3.12
+# RUN manylinux-entrypoint /build_scripts/install-pypy.sh 3.10 7.3.12
+# COPY --from=build_cpython36 /opt/_internal /opt/_internal/
+# COPY --from=build_cpython37 /opt/_internal /opt/_internal/
+# COPY --from=build_cpython38 /opt/_internal /opt/_internal/
+# COPY --from=build_cpython39 /opt/_internal /opt/_internal/
 COPY --from=build_cpython310 /opt/_internal /opt/_internal/
-COPY --from=build_cpython311 /opt/_internal /opt/_internal/
-COPY --from=build_cpython312 /opt/_internal /opt/_internal/
-RUN manylinux-entrypoint /build_scripts/finalize-python.sh
+# COPY --from=build_cpython311 /opt/_internal /opt/_internal/
+# COPY --from=build_cpython312 /opt/_internal /opt/_internal/
+# RUN manylinux-entrypoint /build_scripts/finalize-python.sh
 
 
 FROM runtime_base
@@ -164,15 +164,15 @@ COPY --from=all_python /opt/_internal /opt/_internal/
 COPY build_scripts/finalize.sh \
      build_scripts/update-system-packages.sh \
      build_scripts/python-tag-abi-tag.py \
-     build_scripts/requirements3.6.txt \
-     build_scripts/requirements3.7.txt \
-     build_scripts/requirements3.8.txt \
-     build_scripts/requirements3.9.txt \
      build_scripts/requirements3.10.txt \
-     build_scripts/requirements3.11.txt \
-     build_scripts/requirements3.12.txt \
      build_scripts/requirements-base-tools.txt \
      /build_scripts/
+     # build_scripts/requirements3.6.txt \
+     # build_scripts/requirements3.7.txt \
+     # build_scripts/requirements3.8.txt \
+     # build_scripts/requirements3.9.txt \
+     # build_scripts/requirements3.11.txt \
+     # build_scripts/requirements3.12.txt \
 COPY build_scripts/requirements-tools/* /build_scripts/requirements-tools/
 RUN manylinux-entrypoint /build_scripts/finalize.sh && rm -rf /build_scripts
 

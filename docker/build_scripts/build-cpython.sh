@@ -48,7 +48,9 @@ fi
 ./configure \
 	CFLAGS_NODIST="${MANYLINUX_CFLAGS} ${MANYLINUX_CPPFLAGS} ${CFLAGS_EXTRA}" \
 	LDFLAGS_NODIST="${MANYLINUX_LDFLAGS}" \
-	--prefix=${PREFIX} --disable-shared --with-ensurepip=no > /dev/null
+	--prefix=${PREFIX} --enable-shared --with-ensurepip=no > /dev/null
+	# --prefix=${PREFIX} --disable-shared --with-ensurepip=no > /dev/null
+    # RYAN: this change will spit out libcpython.so that is required by PyInstaller
 make > /dev/null
 make install > /dev/null
 popd
